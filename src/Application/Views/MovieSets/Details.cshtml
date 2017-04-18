@@ -1,0 +1,67 @@
+@model MovieSet
+
+    @{
+        ViewData["Title"] = "Movies";
+    }
+
+    <h2>@Model.SetName</h2>
+
+    <p>
+        <a asp-action="Create" asp-route-id="@Model.MovieSetID" asp-controller="MyMovies">Create New</a>
+    </p>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    <h5><b>Creation Date</b></h5>
+                </th>
+                <th>
+                    <h5><b>Icon</b></h5>
+                </th>
+                <th>
+                    <h5><b>Title</b></h5>
+                </th>
+                <th>
+                    <h5><b>Rating</b></h5>
+                </th>
+                <th>
+                    <h5><b>Year</b></h5>
+                </th>
+                <th>
+                    <h5><b>Comment</b></h5>
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.MyMovies)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.CreationDate)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Movie.MovieIcon)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Movie.MovieName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.MyMovieRating)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Movie.MovieYear)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.MyMovieComment)
+                    </td>
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@item.MyMovieID" asp-controller="MyMovies">Edit</a> |
+                        <a asp-action="Delete" asp-route-id="@item.MyMovieID" asp-controller="MyMovies">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <div>
+        <a asp-action="Index">Back to List</a>
+    </div>

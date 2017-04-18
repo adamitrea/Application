@@ -1,0 +1,145 @@
+@model Application.Models.MyMovie
+
+@{
+    ViewData["Title"] = "Create";
+}
+<head>
+    <script src="~/js/auto-complete.js"></script>
+    <link rel="stylesheet" type="text/css" href="~/css/auto-complete.css">
+</head>
+
+<h2>Create</h2>
+
+<form asp-action="Create">
+    <div class="form-horizontal">
+        <h4>MyMovie</h4>
+        <hr />
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <input type="hidden" asp-for="MovieSetID" />
+        <input type="hidden" asp-for="MovieID" id="hiddenMvId" />
+
+        <div class="form-group">
+            <label asp-for="CreationDate" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="CreationDate" class="form-control" />
+                <span asp-validation-for="CreationDate" class="text-danger" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="MovieID" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input id="inputMovieSelector" class="form-control" />
+            </div>
+
+        </div>
+
+        <div class="form-group">
+            <label asp-for="MyMovieComment" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="MyMovieComment" class="form-control" />
+                <span asp-validation-for="MyMovieComment" class="text-danger" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="MyMovieRating" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="MyMovieRating" class="form-control" />
+                <span asp-validation-for="MyMovieRating" class="text-danger" />
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Create" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+</form>
+<script>
+    var autocomplete = new autoComplete({
+        selector: 'input[id="inputMovieSelector"]',
+        minChars: 1,
+        source: function (pattern, response) {
+            $.getJSON('/api/Search/' + pattern, null, function (data) {
+                var ds = [];
+                for (var i = 0; i < data.length; i++) {
+                    var mv = {};
+                    mv["name"] = data[i].movieName;
+                    mv["tmDb"] = data[i].tmDb;
+                    mv["year"] = data[i].movieYear;
+                    mv["description"] = data[i].movieDescription;
+                    mv["img"] = data[i].movieIcon;
+                    mv["rating"] = data[i].movieRating;
+                    mv["genre"] = data[i].movieGenre;
+                    ds[i] = mv;
+                }
+                response(ds);
+            }
+            )
+        },
+        renderItem: function (item, search) {
+            console.log("autoCompelte.renderItem");
+            search = search.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
+            var re = new RegExp("(" + search.split(' ').join('|') + ")", "gi");
+            var name = item.name;
+            var tmDb = item.tmDb;
+            var year = item.year;
+            var description = item.description;
+            var img = item.img;
+            var rating = item.rating;
+            var genre = item.genre;
+
+            var movie = '<div class="autocomplete-suggestion"' +
+                        ' data-name="' + name + '"' +
+                        ' data-tmDb="' + tmDb + '"' +
+                        ' data-year="' + year + '"' +
+                        ' data-description="' + description + '"' +
+                        ' data-rating="' + rating + '"' +
+                        ' data-genre="' + genre + '"' +
+                        ' data-val="' + search + '"' +
+                    '><img src="https://image.tmdb.org/t/p/w92' + img + '"> ' + name.replace(re, "<b>$1</b>") + '</div>';
+            return movie;
+
+        },
+        onSelect: function (data, term, item) {
+            console.log("autoCompelte.onSelect");
+
+            var name = item.getAttribute('data-name');
+            var tmDb = item.getAttribute('data-tmDb');
+            var year = item.getAttribute('data-year');
+            var description = item.getAttribute('data-description');
+            var img = item.getAttribute('data-img');
+            var rating = item.getAttribute('data-rating');
+            var genre = item.getAttribute('data-genre');
+
+
+            var movie = {
+                TMDb: tmDb,
+                MovieName: name ,
+                MovieYear: year,
+                MovieDescription: description,
+                MovieIcon: img,
+                MovieRating: rating,
+                MovieGenre: genre,
+            };
+
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("PostMovie", "MoviesPost")',
+                data: JSON.stringify(movie),
+                success: function (movie, status, xhr) {
+                    console.log("Created movie with id:" + movie.movieID);
+                    document.getElementById('hiddenMvId').value = movie.movieID;
+                    document.getElementById('inputMovieSelector').value = movie.movieName;
+                },
+                contentType: 'application/json',
+            });
+        }
+    });
+</script>
+<div>
+    <a asp-action="Details" asp-controller="MovieSets" asp-route-id="@Model.MovieSetID">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
