@@ -105,7 +105,7 @@ namespace Application
             {
                 routes.MapRoute(
                     name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}");
+                    template: "{controller=MovieSets}/{action=Index}/{id?}");
             });
 
             DbInitializer.Initialize(context);

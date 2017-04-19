@@ -1,0 +1,8 @@
+﻿@model IEnumerable<Application.Models.MovieSet>
+<h3>Movie Lists</h3>
+<div>
+    @foreach(var item in Model)
+    {
+        <h5><a asp-area="" asp-controller="MovieSets" asp-action="Details" asp-route-id="@item.MovieSetID">@item.SetName</a></h5>
+    }
+</div>
