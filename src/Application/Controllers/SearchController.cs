@@ -10,9 +10,11 @@ using Application.Models;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using Newtonsoft.Json;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Application.Controllers
 {
+    [Authorize]
     [Produces("application/json")]
     public class SearchController : Controller
     {

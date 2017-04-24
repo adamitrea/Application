@@ -10,7 +10,7 @@
         @await Component.InvokeAsync("MovieSets")
     </div>
     <div class="col-md-10">
-        <h2>@Model.SetName</h2>
+        <h2 id="title">@Model.SetName</h2>
 
         <p class="col-xs-1">
             <a asp-action="Create" asp-route-id="@Model.MovieSetID" asp-controller="MyMovies">
@@ -21,25 +21,25 @@
         <thead>
             <tr>
                 <th>
-                    <h5><b>Poster</b></h5>
+                    <h5 id="title"><b>Poster</b></h5>
                 </th>
                 <th>
-                    <h5><b>Title</b></h5>
+                    <h5 id="title"><b>Title</b></h5>
                 </th>
                 <th>
-                    <h5><b>Year</b></h5>
+                    <h5 id="title"><b>Year</b></h5>
                 </th>
                 <th>
-                    <h5><b>Genre</b></h5>
+                    <h5 id="title"><b>Genre</b></h5>
                 </th>
                 <th>
-                    <h5><b>Rating</b></h5>
+                    <h5 id="title"><b>Rating</b></h5>
                 </th>
                 <th>
-                    <h5><b>Comment</b></h5>
+                    <h5 id="title"><b>Comment</b></h5>
                 </th>
                 <th>
-                    <h5><b>Date Added</b></h5>
+                    <h5 id="title"><b>Date Added</b></h5>
                 </th>
             </tr>
         </thead>

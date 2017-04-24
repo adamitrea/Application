@@ -1,19 +1,28 @@
-﻿using System;
+﻿using Application.Models;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace Application.Services
 {
     public interface ICurrentUserId
     {
-        int getID();
+        string GetCurrentUserId(IHttpContextAccessor httpContextAccessor, UserManager<ApplicationUser> userManager);
     }
-    public class CurrentUserId: ICurrentUserId
+
+    public class CurrentUserId : ICurrentUserId
     {
-        public int getID()
+        public string GetCurrentUserId(IHttpContextAccessor _httpContextAccessor, UserManager<ApplicationUser> _userManager)
         {
-            return 1;
+            var userId = _userManager.GetUserId(_httpContextAccessor.HttpContext.User);
+
+            return userId;
         }
     }
+
+
 }

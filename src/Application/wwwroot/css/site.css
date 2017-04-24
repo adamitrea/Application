@@ -35,6 +35,19 @@ textarea {
     padding-left: 0.5em;
 }
 
+a {
+    color: #284B63;
+}
+
+.navbar-inverse {
+    background-color: #EEF1EF;
+    border-color: #CFD1CF;
+}
+
+#title {
+    color: #292C38;
+}
+
 /* Make .svg files in the carousel display properly in older browsers */
 .carousel-inner .item img[src$=".svg"]
 {

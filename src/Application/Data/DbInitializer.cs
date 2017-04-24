@@ -4,12 +4,13 @@ using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Application.Data;
+using Microsoft.AspNetCore.Identity;
 
 namespace Application.Models
 {
     public static class DbInitializer
     {
-        public static void Initialize(ApplicationDbContext context)
+        public static async void Initialize(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
         {
             context.Database.EnsureCreated();
 
@@ -18,28 +19,25 @@ namespace Application.Models
                 return;
             }
 
-            var users = new User[]
+            ApplicationUser user = new ApplicationUser
             {
-            new User{UserName="Carson Alexander"},
-            new User{UserName="Meredith Alonso"},
-            new User{UserName="Arturo Anand"},
-            new User{UserName="Gytis Barzdukas"},
-            new User{UserName="Yan Li"},
-
+                UserName = "Johnny",
+                Email = "herecomesjohnny@murder.com",
+                EmailConfirmed = true
             };
-            foreach (User u in users)
+            IdentityResult result = await userManager.CreateAsync(user, "HereComesJohnny!123");
+            if (!result.Succeeded)
             {
-                context.Users.Add(u);
+                throw new Exception("Couldn't initialize user");
             }
-            context.SaveChanges();
-
+            //context.Users.Add(user);
             var movies = new Movie[]
-            {
+        {
             new Movie{MovieName="Donnie Darko",TMDb=1,MovieYear="2001",MovieDescription="",MovieIcon="",MovieRating=8.1,MovieGenre="Drama, Sci-Fi, Thriller",},
             new Movie{MovieName="Inception",TMDb=2,MovieYear="2010",MovieDescription="",MovieIcon="",MovieRating=8.8,MovieGenre="Action, Adventure, Sci-Fi",},
             new Movie{MovieName="Pan's Labyrinth",TMDb=3,MovieYear="2006",MovieDescription="",MovieIcon="",MovieRating=8.2,MovieGenre="Drama, Fantasy, War",},
             new Movie{MovieName="A Beautiful Mind",TMDb=4,MovieYear="2001",MovieDescription="",MovieIcon="",MovieRating=8.2,MovieGenre="Biography, Drama",},
-            };
+        };
             foreach (Movie m in movies)
             {
                 context.Movies.Add(m);
@@ -48,10 +46,10 @@ namespace Application.Models
 
             var moviesets = new MovieSet[]
 {
-            new MovieSet{UserID=1,SetName="SF",CreationDate=DateTime.Parse("2005-09-01"),},
-            new MovieSet{UserID=1,SetName="Drama",CreationDate=DateTime.Parse("2015-10-07"),},
-            new MovieSet{UserID=1,SetName="Filme3",CreationDate=DateTime.Parse("2014-11-13"),},
-            new MovieSet{UserID=3,SetName="Filme4",CreationDate=DateTime.Parse("2013-09-15"),},
+            new MovieSet{UserID=user.Id,SetName="SF",CreationDate=DateTime.Parse("2005-09-01"),},
+            new MovieSet{UserID=user.Id,SetName="Drama",CreationDate=DateTime.Parse("2015-10-07"),},
+            new MovieSet{UserID=user.Id,SetName="Filme3",CreationDate=DateTime.Parse("2014-11-13"),},
+            new MovieSet{UserID=user.Id,SetName="Filme4",CreationDate=DateTime.Parse("2013-09-15"),},
 
 };
             foreach (MovieSet l in moviesets)

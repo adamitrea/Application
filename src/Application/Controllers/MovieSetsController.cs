@@ -8,25 +8,38 @@ using Microsoft.EntityFrameworkCore;
 using Application.Data;
 using Application.Models;
 using Application.Services;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Application.Controllers
 {
+    [Authorize]
     public class MovieSetsController : Controller
     {
         private readonly ApplicationDbContext _context;
 
         private readonly ICurrentUserId _currentuserid;
 
-        public MovieSetsController(ApplicationDbContext context, ICurrentUserId currentuserid)
+        private readonly UserManager<ApplicationUser> _userManager;
+
+        private readonly IHttpContextAccessor _httpContextAccessor;
+
+        public MovieSetsController(ApplicationDbContext context, ICurrentUserId currentuserid, IHttpContextAccessor httpContextAccessor, UserManager<ApplicationUser> userManager)
         {
             _context = context;
             _currentuserid = currentuserid;
+            _httpContextAccessor = httpContextAccessor;
+            _userManager = userManager;
         }
+
 
         // GET: MovieLists
         public async Task<IActionResult> Index()
         {
-            var applicationContext = _context.MovieSets.Include(m => m.User);
+            var applicationContext = _context.MovieSets.Include(m => m.User)
+                .Where(x => x.UserID == _currentuserid.GetCurrentUserId(_httpContextAccessor,_userManager));
+
             return View(await applicationContext.ToListAsync());
         }
 
@@ -67,7 +80,7 @@ namespace Application.Controllers
             {
                 movieSet.CreationDate = DateTime.Today;
                 _context.Add(movieSet);
-                movieSet.UserID = _currentuserid.getID();
+                movieSet.UserID = _currentuserid.GetCurrentUserId(_httpContextAccessor, _userManager);
                 await _context.SaveChangesAsync();
                 return RedirectToAction("Index");
             }

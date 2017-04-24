@@ -7,9 +7,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Application.Data;
 using Application.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Application.Controllers
 {
+    [Authorize]
     [Produces("application/json")]
     [Route("api/MoviesPost")]
     public class MoviesPostController : Controller

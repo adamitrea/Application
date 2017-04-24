@@ -249,7 +249,6 @@ D:\Informatica\visual studio\Application correct\Application-master\src\Applicat
 D:\Informatica\visual studio\Application correct\Application-master\src\Application\Controllers\MoviesPostController.cs
 D:\Informatica\visual studio\Application correct\Application-master\src\Application\Controllers\MyMoviesController.cs
 D:\Informatica\visual studio\Application correct\Application-master\src\Application\Controllers\SearchController.cs
-D:\Informatica\visual studio\Application correct\Application-master\src\Application\Data\ApplicationContext.cs
 D:\Informatica\visual studio\Application correct\Application-master\src\Application\Data\ApplicationDbContext.cs
 D:\Informatica\visual studio\Application correct\Application-master\src\Application\Data\DbInitializer.cs
 D:\Informatica\visual studio\Application correct\Application-master\src\Application\Data\Migrations\00000000000000_CreateIdentitySchema.cs
@@ -261,7 +260,6 @@ D:\Informatica\visual studio\Application correct\Application-master\src\Applicat
 D:\Informatica\visual studio\Application correct\Application-master\src\Application\Models\MyMovie.cs
 D:\Informatica\visual studio\Application correct\Application-master\src\Application\Models\TMDbGenre.cs
 D:\Informatica\visual studio\Application correct\Application-master\src\Application\Models\TMDbMovie.cs
-D:\Informatica\visual studio\Application correct\Application-master\src\Application\Models\User.cs
 D:\Informatica\visual studio\Application correct\Application-master\src\Application\Models\AccountViewModels\ExternalLoginConfirmationViewModel.cs
 D:\Informatica\visual studio\Application correct\Application-master\src\Application\Models\AccountViewModels\ForgotPasswordViewModel.cs
 D:\Informatica\visual studio\Application correct\Application-master\src\Application\Models\AccountViewModels\LoginViewModel.cs

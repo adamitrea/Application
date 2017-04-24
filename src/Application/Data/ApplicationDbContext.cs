@@ -15,7 +15,7 @@ namespace Application.Data
         {
         }
 
-        public DbSet<User> Users { get; set; }
+       // public DbSet<ApplicationUser> Users { get; set; }
         public DbSet<MovieSet> MovieSets { get; set; }
         public DbSet<Movie> Movies { get; set; }
         public DbSet<MyMovie> MyMovies { get; set; }
@@ -29,8 +29,12 @@ namespace Application.Data
             // Customize the ASP.NET Identity model and override the defaults if needed.
             // For example, you can rename the ASP.NET Identity table names and more.
             // Add your customizations after calling base.OnModelCreating(builder);
-            modelBuilder.Entity<User>().ToTable("User");
-            modelBuilder.Entity<MovieSet>().ToTable("MovieSet");
+            //modelBuilder.Entity<ApplicationUser>().ToTable("User");
+            modelBuilder.Entity<MovieSet>().ToTable("MovieSet")
+                .HasOne(x => x.User)
+                .WithMany(x => x.MovieSets)
+                .HasForeignKey(x => x.UserID);
+                //.HasConstraintName(UserID);
             modelBuilder.Entity<Movie>().ToTable("Movie");
             modelBuilder.Entity<MyMovie>().ToTable("MyMovie");
             modelBuilder.Entity<TMDbGenre>().ToTable("TMDbGenre");

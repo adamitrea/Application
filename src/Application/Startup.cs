@@ -13,6 +13,8 @@ using Application.Data;
 using Application.Models;
 using Application.Services;
 using Microsoft.Extensions.Configuration.UserSecrets;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Http;
 
 namespace Application
 {
@@ -61,6 +63,7 @@ namespace Application
             services.AddTransient<IEmailSender, AuthMessageSender>();
             services.AddTransient<ISmsSender, AuthMessageSender>();
             services.AddTransient<ICurrentUserId, CurrentUserId>();
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -107,8 +110,8 @@ namespace Application
                     name: "default",
                     template: "{controller=MovieSets}/{action=Index}/{id?}");
             });
-
-            DbInitializer.Initialize(context);
+            var userManager = app.ApplicationServices.GetService<UserManager<ApplicationUser>>();
+            DbInitializer.Initialize(context,userManager);
         }
     }
 }
