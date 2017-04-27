@@ -15,6 +15,8 @@ using Application.Services;
 using Microsoft.Extensions.Configuration.UserSecrets;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Http;
+using Application_DbAccess;
+using Application_BusinessRules;
 
 namespace Application
 {
@@ -47,15 +49,19 @@ namespace Application
             // Add framework services.
             services.AddApplicationInsightsTelemetry(Configuration);
 
-            services.AddDbContext<ApplicationDbContext>(options =>
+            services.AddDbContext<ApplicationContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
-            services.AddIdentity<ApplicationUser, IdentityRole>()
+            services.AddIdentity<Models.ApplicationUser, IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
+            services.AddIdentity<Application_DbAccess.ApplicationUser, IdentityRole>()
+                .AddEntityFrameworkStores<ApplicationContext>()
+                .AddDefaultTokenProviders();
+           // services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 
             services.AddMvc();
 
@@ -63,11 +69,14 @@ namespace Application
             services.AddTransient<IEmailSender, AuthMessageSender>();
             services.AddTransient<ISmsSender, AuthMessageSender>();
             services.AddTransient<ICurrentUserId, CurrentUserId>();
+            services.AddTransient<IAuthorizeMovieSet, AuthorizeMovieSet>();
+            services.AddTransient<IAuthorizeMyMovie, AuthorizeMyMovie>();
+            services.AddTransient<IAuthorizeMovie, AuthorizeMovie>();
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, ApplicationDbContext context)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, ApplicationDbContext context, ApplicationContext _context)
         {
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
@@ -110,8 +119,8 @@ namespace Application
                     name: "default",
                     template: "{controller=MovieSets}/{action=Index}/{id?}");
             });
-            var userManager = app.ApplicationServices.GetService<UserManager<ApplicationUser>>();
-            DbInitializer.Initialize(context,userManager);
+            var userManager = app.ApplicationServices.GetService<UserManager<Models.ApplicationUser>>();
+            DbInitializer.Initialize(_context,userManager,context);
         }
     }
 }

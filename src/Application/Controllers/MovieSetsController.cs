@@ -6,59 +6,62 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Application.Data;
-using Application.Models;
+using Application_DbAccess;
 using Application.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authorization;
+using Application.Models;
+using Application_BusinessRules;
 
 namespace Application.Controllers
 {
     [Authorize]
     public class MovieSetsController : Controller
     {
-        private readonly ApplicationDbContext _context;
+        private readonly ApplicationContext _context;
+
+        private readonly ApplicationDbContext _contextDb;
 
         private readonly ICurrentUserId _currentuserid;
 
-        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly UserManager<Application_DbAccess.ApplicationUser> _userManager;
 
         private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public MovieSetsController(ApplicationDbContext context, ICurrentUserId currentuserid, IHttpContextAccessor httpContextAccessor, UserManager<ApplicationUser> userManager)
+        private readonly RepositoryMovieSet _movieset;
+
+        private readonly IAuthorizeMovieSet _authmovieset;
+
+        public MovieSetsController(ApplicationContext context, ICurrentUserId currentuserid, IHttpContextAccessor httpContextAccessor, UserManager<Application_DbAccess.ApplicationUser> userManager, ApplicationDbContext contextDb, RepositoryMovieSet movieset, IAuthorizeMovieSet authmovieset)
         {
             _context = context;
+            _contextDb = contextDb;
             _currentuserid = currentuserid;
             _httpContextAccessor = httpContextAccessor;
             _userManager = userManager;
+            _movieset = movieset;
+            _authmovieset = authmovieset;
         }
 
 
         // GET: MovieLists
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
-            var applicationContext = _context.MovieSets.Include(m => m.User)
+            var applicationContext = _movieset.GetAll()
                 .Where(x => x.UserID == _currentuserid.GetCurrentUserId(_httpContextAccessor,_userManager));
 
-            return View(await applicationContext.ToListAsync());
+            return View(applicationContext.ToList());
         }
 
         // GET: MovieLists/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public IActionResult Details(int? id)
         {
-            if (id == null)
+            if(!_authmovieset.CheckUserId(id,_currentuserid,_httpContextAccessor,_userManager,_movieset))
             {
-                return NotFound();
+                return Unauthorized();
             }
-
-            var movieSet = await _context.MovieSets
-                .Include(x => x.MyMovies)
-                    .ThenInclude(x => x.Movie)
-                .SingleOrDefaultAsync(m => m.MovieSetID == id);
-            if (movieSet == null)
-            {
-                return NotFound();
-            }
+            var movieSet = _movieset.Get(id);
 
             return View(movieSet);
         }
@@ -66,7 +69,6 @@ namespace Application.Controllers
         // GET: MovieLists/Create
         public IActionResult Create()
         {
-            ViewData["UserID"] = new SelectList(_context.Users, "UserID", "UserID");
             return View();
         }
 
@@ -74,33 +76,24 @@ namespace Application.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("MovieSetID,SetName,UserID")] MovieSet movieSet)
+        public IActionResult Create([Bind("MovieSetID,SetName,UserID")] MovieSet movieSet)
         {
             if (ModelState.IsValid)
             {
                 movieSet.CreationDate = DateTime.Today;
-                _context.Add(movieSet);
                 movieSet.UserID = _currentuserid.GetCurrentUserId(_httpContextAccessor, _userManager);
-                await _context.SaveChangesAsync();
+                _movieset.Insert(movieSet);
                 return RedirectToAction("Index");
             }
-            ViewData["UserID"] = new SelectList(_context.Users, "UserID", "UserID", movieSet.UserID);
             return View(movieSet);
         }
 
         // GET: MovieLists/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        public IActionResult Edit(int? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
 
-            var movieSet = await _context.MovieSets.SingleOrDefaultAsync(m => m.MovieSetID == id);
-            if (movieSet == null)
-            {
-                return NotFound();
-            }
+            var movieSet = _movieset.GetSingle(id);
+
             return View(movieSet);
         }
 
@@ -109,23 +102,26 @@ namespace Application.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("MovieSetID,SetName,UserID")] MovieSet movieSet)
+        public IActionResult Edit(int id, [Bind("MovieSetID,SetName,UserID")] MovieSet movieSet)
         {
             if (id != movieSet.MovieSetID)
             {
                 return NotFound();
+            }
+            if (!_authmovieset.CheckUserId(id, _currentuserid, _httpContextAccessor, _userManager, _movieset))
+            {
+                return Unauthorized();
             }
 
             if (ModelState.IsValid)
             {
                 try
                 {
-                    _context.Update(movieSet);
-                    await _context.SaveChangesAsync();
+                    _movieset.Update(movieSet);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!MovieSetExists(movieSet.MovieSetID))
+                    if (!_authmovieset.MovieSetExists(movieSet.MovieSetID, _movieset))
                     {
                         return NotFound();
                     }
@@ -136,23 +132,14 @@ namespace Application.Controllers
                 }
                 return RedirectToAction("Index");
             }
-            ViewData["UserID"] = new SelectList(_context.Users, "UserID", "UserID", movieSet.UserID);
             return View(movieSet);
         }
 
         // GET: MovieLists/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        public IActionResult Delete(int? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
 
-            var movieSet = await _context.MovieSets.SingleOrDefaultAsync(m => m.MovieSetID == id);
-            if (movieSet == null)
-            {
-                return NotFound();
-            }
+            var movieSet = _movieset.GetSingle(id);
 
             return View(movieSet);
         }
@@ -160,18 +147,18 @@ namespace Application.Controllers
         // POST: MovieLists/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public IActionResult DeleteConfirmed(int id)
         {
-            var movieSet = await _context.MovieSets.SingleOrDefaultAsync(m => m.MovieSetID == id);
-            _context.MovieSets.Remove(movieSet);
-            await _context.SaveChangesAsync();
+            if (!_authmovieset.CheckUserId(id, _currentuserid, _httpContextAccessor, _userManager, _movieset))
+            {
+                return Unauthorized();
+            }
+            var movieSet = _movieset.GetSingle(id);
+            _movieset.Delete(movieSet);
             return RedirectToAction("Index");
         }
 
-        private bool MovieSetExists(int id)
-        {
-            return _context.MovieSets.Any(e => e.MovieSetID == id);
-        }
+
     }
 }
 

@@ -6,8 +6,9 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Application.Data;
-using Application.Models;
 using Microsoft.AspNetCore.Authorization;
+using Application_DbAccess;
+using Application_BusinessRules;
 
 namespace Application.Controllers
 {
@@ -16,38 +17,43 @@ namespace Application.Controllers
     [Route("api/MoviesPost")]
     public class MoviesPostController : Controller
     {
-        private readonly ApplicationDbContext _context;
+        private readonly ApplicationContext _context;
 
-        public MoviesPostController(ApplicationDbContext context)
+        private readonly RepositoryMovie _repoMovie;
+
+        private readonly IAuthorizeMovie _authmovie;
+
+        public MoviesPostController(ApplicationContext context, RepositoryMovie repoMovie, IAuthorizeMovie authmovie)
         {
             _context = context;
+            _repoMovie = repoMovie;
+            _authmovie = authmovie;
         }
 
         // GET: api/MoviesPost
         [HttpGet]
         public IEnumerable<Movie> GetMovie()
         {
-            return _context.Movies;
+            return _repoMovie.GetAll();
         }
 
         
         // POST: api/MoviesPost
         [HttpPost]
-        public async Task<IActionResult> PostMovie([FromBody] Movie movie)
+        public IActionResult PostMovie([FromBody] Movie movie)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            _context.Movies.Add(movie);
             try
             {
-                await _context.SaveChangesAsync();
+                _repoMovie.Insert(movie);
             }
             catch (DbUpdateException)
             {
-                if (MovieExists(movie.MovieID,movie.TMDb))
+                if (_authmovie.MovieExists(movie.MovieID,movie.TMDb,_repoMovie))
                 {
                     return new StatusCodeResult(StatusCodes.Status409Conflict);
                 }
@@ -60,12 +66,5 @@ namespace Application.Controllers
             return CreatedAtAction("GetMovie", new { id = movie.MovieID }, movie);
         }
 
-
-        private bool MovieExists(int id, int tmdb)
-        {
-            if (_context.Movies.Any(e => e.MovieID == id)) return true;
-            else return _context.Movies.Any(e => e.TMDb == tmdb);
-
-        }
     }
 }

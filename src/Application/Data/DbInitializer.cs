@@ -5,23 +5,27 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Application.Data;
 using Microsoft.AspNetCore.Identity;
+using Application_DbAccess;
+//using Application.Models;
 
 namespace Application.Models
 {
     public static class DbInitializer
     {
-        public static async void Initialize(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
+        public static async void Initialize(ApplicationContext context, UserManager<Models.ApplicationUser> userManager,ApplicationDbContext _context)
         {
-            context.Database.EnsureCreated();
+            //context.Database.EnsureCreated();
 
-            if (context.Users.Any())
+            _context.Database.EnsureCreated();
+
+            if (_context.Users.Any())
             {
                 return;
             }
 
             ApplicationUser user = new ApplicationUser
             {
-                UserName = "Johnny",
+                UserName = "herecomesjohnny@murder.com",
                 Email = "herecomesjohnny@murder.com",
                 EmailConfirmed = true
             };

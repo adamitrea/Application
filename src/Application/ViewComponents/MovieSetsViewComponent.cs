@@ -6,14 +6,15 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Application.Models;
 using Application.Data;
+using Application_DbAccess;
 
 namespace Application.ViewComponents
 {
     public class MovieSetsViewComponent: ViewComponent
     {
-        private readonly ApplicationDbContext _context;
+        private readonly ApplicationContext _context;
 
-        public MovieSetsViewComponent(ApplicationDbContext context)
+        public MovieSetsViewComponent(ApplicationContext context)
         {
             _context = context;
         }

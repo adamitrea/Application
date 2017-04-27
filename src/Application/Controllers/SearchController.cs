@@ -6,11 +6,12 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Application.Data;
-using Application.Models;
+//using Application.Models;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using Newtonsoft.Json;
 using Microsoft.AspNetCore.Authorization;
+using Application_DbAccess;
 
 namespace Application.Controllers
 {
@@ -18,11 +19,17 @@ namespace Application.Controllers
     [Produces("application/json")]
     public class SearchController : Controller
     {
-        private readonly ApplicationDbContext _context;
+        private readonly ApplicationContext _context;
 
-        public SearchController(ApplicationDbContext context)
+        private readonly RepositoryMovie _repoMovie;
+
+        private readonly RepositoryTMDbGenre _repoGenre;
+
+        public SearchController(ApplicationContext context, RepositoryMovie repoMovie, RepositoryTMDbGenre repoGenre)
         {
             _context = context;
+            _repoMovie = repoMovie;
+            _repoGenre = repoGenre;
         }
 
         // GET: api/Search
@@ -30,7 +37,7 @@ namespace Application.Controllers
         [HttpGet]
         public IEnumerable<Movie> GetMovie()
         {
-            return _context.Movies.ToList();
+            return _repoMovie.GetAll().ToList();
         }
         [Route("Search")]
         public IActionResult Index()
@@ -53,8 +60,7 @@ namespace Application.Controllers
             if (response.IsSuccessStatusCode)
             {
                 var tmdb = JsonConvert.DeserializeObject<TMDbMovie>(jsonResponse);
-                //var genreresult = tmdb.results.SelectMany(x => x.genre_ids).Distinct();
-                var genretmdb = _context.TMDbGenres;
+                var genretmdb = _repoGenre.GetAll();
                 foreach (var item in tmdb.results)
                 {
                     var movie = new Movie();
