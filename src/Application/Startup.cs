@@ -1,18 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Application.Data;
 using Application.Models;
 using Application.Services;
-using Microsoft.Extensions.Configuration.UserSecrets;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Http;
 using Application_DbAccess;
@@ -49,18 +43,15 @@ namespace Application
             // Add framework services.
             services.AddApplicationInsightsTelemetry(Configuration);
 
-            services.AddDbContext<ApplicationContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+            services.AddDbContext<ApplicationContext>(options => {
+                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
+            });
 
-            services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
-
-            services.AddIdentity<Models.ApplicationUser, IdentityRole>()
-                .AddEntityFrameworkStores<ApplicationDbContext>()
-                .AddDefaultTokenProviders();
-            services.AddIdentity<Application_DbAccess.ApplicationUser, IdentityRole>()
+          
+            services.AddIdentity<ApplicationUser, IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationContext>()
                 .AddDefaultTokenProviders();
+           
            // services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 
             services.AddMvc();
@@ -68,15 +59,19 @@ namespace Application
             // Add application services.
             services.AddTransient<IEmailSender, AuthMessageSender>();
             services.AddTransient<ISmsSender, AuthMessageSender>();
-            services.AddTransient<ICurrentUserId, CurrentUserId>();
+            services.AddTransient<ICurrentUserService, CurrentUserService>();
             services.AddTransient<IAuthorizeMovieSet, AuthorizeMovieSet>();
             services.AddTransient<IAuthorizeMyMovie, AuthorizeMyMovie>();
             services.AddTransient<IAuthorizeMovie, AuthorizeMovie>();
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            services.AddTransient<RepositoryMyMovie, RepositoryMyMovie>();
+            services.AddTransient<RepositoryMovieSet, RepositoryMovieSet>();
+            services.AddTransient<RepositoryMovie, RepositoryMovie>();
+            services.AddTransient<RepositoryTMDbGenre, RepositoryTMDbGenre>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, ApplicationDbContext context, ApplicationContext _context)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, ApplicationContext _context)
         {
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
@@ -119,8 +114,8 @@ namespace Application
                     name: "default",
                     template: "{controller=MovieSets}/{action=Index}/{id?}");
             });
-            var userManager = app.ApplicationServices.GetService<UserManager<Models.ApplicationUser>>();
-            DbInitializer.Initialize(_context,userManager,context);
+            var userManager = app.ApplicationServices.GetService<UserManager<ApplicationUser>>();
+            DbInitializer.Initialize(_context,userManager);
         }
     }
 }

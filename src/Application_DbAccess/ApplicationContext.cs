@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace Application_DbAccess
 {
-    public class ApplicationContext :DbContext
+    public class ApplicationContext : IdentityDbContext
     {
         public ApplicationContext(DbContextOptions<ApplicationContext> options)
             : base(options)
@@ -24,17 +20,17 @@ namespace Application_DbAccess
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-            modelBuilder.Entity<MovieSet>().ToTable("MovieSet");
-                ////.HasOne(x => x.User)
-                ////.WithMany(x => x.MovieSets)
-                //.HasForeignKey(x => x.UserID);
+            modelBuilder.Entity<ApplicationUser>()
+                .HasMany(x => x.MovieSets)
+                .WithOne(x => x.User)
+                .HasForeignKey(x => x.UserID);
             modelBuilder.Entity<Movie>().ToTable("Movie");
             modelBuilder.Entity<MyMovie>().ToTable("MyMovie");
+            modelBuilder.Entity<MovieSet>().ToTable("MovieSets");
             modelBuilder.Entity<TMDbGenre>().ToTable("TMDbGenre");
-            modelBuilder.Entity<ApplicationUser>().ToTable("Users");
         }
 
         //public DbSet<Movie> Movies { get; set; }
-
+       
     }
 }

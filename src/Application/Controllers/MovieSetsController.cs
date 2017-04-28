@@ -1,17 +1,10 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using Application.Data;
 using Application_DbAccess;
-using Application.Services;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authorization;
-using Application.Models;
 using Application_BusinessRules;
 
 namespace Application.Controllers
@@ -19,13 +12,7 @@ namespace Application.Controllers
     [Authorize]
     public class MovieSetsController : Controller
     {
-        private readonly ApplicationContext _context;
-
-        private readonly ApplicationDbContext _contextDb;
-
-        private readonly ICurrentUserId _currentuserid;
-
-        private readonly UserManager<Application_DbAccess.ApplicationUser> _userManager;
+        private readonly ICurrentUserService _currentuserid;
 
         private readonly IHttpContextAccessor _httpContextAccessor;
 
@@ -33,13 +20,10 @@ namespace Application.Controllers
 
         private readonly IAuthorizeMovieSet _authmovieset;
 
-        public MovieSetsController(ApplicationContext context, ICurrentUserId currentuserid, IHttpContextAccessor httpContextAccessor, UserManager<Application_DbAccess.ApplicationUser> userManager, ApplicationDbContext contextDb, RepositoryMovieSet movieset, IAuthorizeMovieSet authmovieset)
+        public MovieSetsController(ICurrentUserService currentuserid, IHttpContextAccessor httpContextAccessor, RepositoryMovieSet movieset, IAuthorizeMovieSet authmovieset)
         {
-            _context = context;
-            _contextDb = contextDb;
             _currentuserid = currentuserid;
             _httpContextAccessor = httpContextAccessor;
-            _userManager = userManager;
             _movieset = movieset;
             _authmovieset = authmovieset;
         }
@@ -49,7 +33,7 @@ namespace Application.Controllers
         public IActionResult Index()
         {
             var applicationContext = _movieset.GetAll()
-                .Where(x => x.UserID == _currentuserid.GetCurrentUserId(_httpContextAccessor,_userManager));
+                .Where(x => x.UserID == _currentuserid.GetCurrentUserId(_httpContextAccessor));
 
             return View(applicationContext.ToList());
         }
@@ -57,7 +41,7 @@ namespace Application.Controllers
         // GET: MovieLists/Details/5
         public IActionResult Details(int? id)
         {
-            if(!_authmovieset.CheckUserId(id,_currentuserid,_httpContextAccessor,_userManager,_movieset))
+            if (!_authmovieset.CheckUserId(id, _httpContextAccessor))
             {
                 return Unauthorized();
             }
@@ -81,7 +65,7 @@ namespace Application.Controllers
             if (ModelState.IsValid)
             {
                 movieSet.CreationDate = DateTime.Today;
-                movieSet.UserID = _currentuserid.GetCurrentUserId(_httpContextAccessor, _userManager);
+                movieSet.UserID = _currentuserid.GetCurrentUserId(_httpContextAccessor);
                 _movieset.Insert(movieSet);
                 return RedirectToAction("Index");
             }
@@ -108,7 +92,7 @@ namespace Application.Controllers
             {
                 return NotFound();
             }
-            if (!_authmovieset.CheckUserId(id, _currentuserid, _httpContextAccessor, _userManager, _movieset))
+            if (!_authmovieset.CheckUserId(id, _httpContextAccessor))
             {
                 return Unauthorized();
             }
@@ -121,7 +105,7 @@ namespace Application.Controllers
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!_authmovieset.MovieSetExists(movieSet.MovieSetID, _movieset))
+                    if (!_authmovieset.MovieSetExists(movieSet.MovieSetID))
                     {
                         return NotFound();
                     }
@@ -149,7 +133,7 @@ namespace Application.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult DeleteConfirmed(int id)
         {
-            if (!_authmovieset.CheckUserId(id, _currentuserid, _httpContextAccessor, _userManager, _movieset))
+            if (!_authmovieset.CheckUserId(id, _httpContextAccessor))
             {
                 return Unauthorized();
             }

@@ -2914,6 +2914,8 @@
       "Application_BusinessRules/1.0.0": {
         "dependencies": {
           "Application_DbAccess": "1.0.0",
+          "Microsoft.AspNetCore.Http.Abstractions": "1.1.1",
+          "Microsoft.AspNetCore.Identity": "1.1.1",
           "NETStandard.Library": "1.6.1"
         },
         "compile": {
@@ -2923,6 +2925,8 @@
       "Application_DbAccess/1.0.0": {
         "dependencies": {
           "Microsoft.AspNetCore.Identity.EntityFrameworkCore": "1.1.1",
+          "Microsoft.EntityFrameworkCore": "1.1.1",
+          "Microsoft.EntityFrameworkCore.Relational": "1.1.1",
           "NETStandard.Library": "1.6.1"
         },
         "compile": {
@@ -5729,6 +5733,8 @@
       "Application_BusinessRules/1.0.0": {
         "dependencies": {
           "Application_DbAccess": "1.0.0",
+          "Microsoft.AspNetCore.Http.Abstractions": "1.1.1",
+          "Microsoft.AspNetCore.Identity": "1.1.1",
           "NETStandard.Library": "1.6.1"
         },
         "runtime": {
@@ -5738,6 +5744,8 @@
       "Application_DbAccess/1.0.0": {
         "dependencies": {
           "Microsoft.AspNetCore.Identity.EntityFrameworkCore": "1.1.1",
+          "Microsoft.EntityFrameworkCore": "1.1.1",
+          "Microsoft.EntityFrameworkCore.Relational": "1.1.1",
           "NETStandard.Library": "1.6.1"
         },
         "runtime": {
@@ -6230,7 +6238,7 @@
     "Microsoft.NETCore.App/1.0.1": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-M3iH7u95LntTkJtI/DqN/96MRlb8Wa0SjnXldxHA4FjlvEqghOhwK087bDZAZaTN9C4YHckvaYH3ka9eYWZZZw=="
+      "sha512": "sha512-huOUIAPehODxhtxxCj1HL1S5xy/blks3Pl/BopUm4QIC/9TILPI+S5GHKBVKFaxeqN5sEsmH7pfvOKVl7LE9gg=="
     },
     "Microsoft.NETCore.DotNetHost/1.0.1": {
       "type": "package",
@@ -6250,7 +6258,7 @@
     "Microsoft.NETCore.Jit/1.0.4": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-IcHTGj+vTFcOu7/flwNg+CWIfTsxqHWgj08MKOtYwS5k0EuLvx6PrYsn7vHCV0SUTk1zbQ1l0EJj1UdxTMyx4w=="
+      "sha512": "sha512-xLXHIFye+2yqXwS8KN3ibTanBHCkPKGMYeEjokjvtcIzkDAgFSeUcgu5KjXEe/ONE4tx0yTLokwhoL1DLZ4XUQ=="
     },
     "Microsoft.NETCore.Platforms/1.1.0": {
       "type": "package",
@@ -6260,7 +6268,7 @@
     "Microsoft.NETCore.Runtime.CoreCLR/1.0.4": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-r4/aP7VYcJ+W/rJVFU+jAdjF4KrsHRDYQJ+p8weUP5n65yLzWXlQTVY6OsR560aV5EF7jc65dqsNXIryUCrEkQ=="
+      "sha512": "sha512-BBL/Ds+h171uBQwhcHDkZc1Ah0x6Q8E0vRHWpPmJJa0YE16+J0o+svi/iP6M2Ja/FNDziZqRHD7QfpHRuGTOLA=="
     },
     "Microsoft.NETCore.Targets/1.1.0": {
       "type": "package",

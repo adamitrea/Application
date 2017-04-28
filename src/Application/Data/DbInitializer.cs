@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
-using Application.Data;
 using Microsoft.AspNetCore.Identity;
 using Application_DbAccess;
 //using Application.Models;
@@ -12,13 +8,11 @@ namespace Application.Models
 {
     public static class DbInitializer
     {
-        public static async void Initialize(ApplicationContext context, UserManager<Models.ApplicationUser> userManager,ApplicationDbContext _context)
+        public static async void Initialize(ApplicationContext applicationContext, UserManager<ApplicationUser> userManager)
         {
-            //context.Database.EnsureCreated();
+             applicationContext.Database.EnsureCreated();
 
-            _context.Database.EnsureCreated();
-
-            if (_context.Users.Any())
+            if (applicationContext.Movies.Any())
             {
                 return;
             }
@@ -34,7 +28,10 @@ namespace Application.Models
             {
                 throw new Exception("Couldn't initialize user");
             }
-            //context.Users.Add(user);
+
+
+            //applicationContext.Users.Add(user);
+
             var movies = new Movie[]
         {
             new Movie{MovieName="Donnie Darko",TMDb=1,MovieYear="2001",MovieDescription="",MovieIcon="",MovieRating=8.1,MovieGenre="Drama, Sci-Fi, Thriller",},
@@ -44,9 +41,9 @@ namespace Application.Models
         };
             foreach (Movie m in movies)
             {
-                context.Movies.Add(m);
+                applicationContext.Movies.Add(m);
             }
-            context.SaveChanges();
+            applicationContext.SaveChanges();
 
             var moviesets = new MovieSet[]
 {
@@ -58,9 +55,9 @@ namespace Application.Models
 };
             foreach (MovieSet l in moviesets)
             {
-                context.MovieSets.Add(l);
+                applicationContext.MovieSets.Add(l);
             }
-            context.SaveChanges();
+            applicationContext.SaveChanges();
 
             var mymovies = new MyMovie[]
 {
@@ -79,7 +76,7 @@ namespace Application.Models
 };
             foreach (MyMovie my in mymovies)
             {
-                context.MyMovies.Add(my);
+                applicationContext.MyMovies.Add(my);
             }
 
             var genres = new TMDbGenre[]
@@ -107,10 +104,10 @@ namespace Application.Models
 
             foreach (TMDbGenre g in genres)
             {
-                context.TMDbGenres.Add(g);
+                applicationContext.TMDbGenres.Add(g);
             }
 
-            context.SaveChanges();
+            applicationContext.SaveChanges();
 
         }
     }

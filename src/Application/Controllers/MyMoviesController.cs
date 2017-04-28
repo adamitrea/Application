@@ -1,11 +1,9 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using Application.Data;
+using Application.Models;
 using Application_DbAccess;
 using Microsoft.AspNetCore.Authorization;
 using Application_BusinessRules;
@@ -16,14 +14,9 @@ namespace Application.Controllers
 {
     [Authorize]
     public class MyMoviesController : Controller
-    {
-        private readonly ApplicationContext _context;
+    { 
 
         private readonly RepositoryMyMovie _repoMyMovie;
-
-        private readonly UserManager<ApplicationUser> _userManager;
-
-        private readonly ICurrentUserId _currentuserid;
 
         private readonly IHttpContextAccessor _httpContextAccessor;
 
@@ -33,13 +26,10 @@ namespace Application.Controllers
 
         private readonly IAuthorizeMyMovie _authmymovie;
 
-        public MyMoviesController(ApplicationContext context, RepositoryMyMovie repoMyMovie, ICurrentUserId currentuserid, IHttpContextAccessor httpContextAccessor, UserManager<ApplicationUser> userManager, RepositoryMovieSet movieset, IAuthorizeMovieSet authmovieset, IAuthorizeMyMovie authmymovie)
+        public MyMoviesController( RepositoryMyMovie repoMyMovie, ICurrentUserService currentuserid, IHttpContextAccessor httpContextAccessor, RepositoryMovieSet movieset, IAuthorizeMovieSet authmovieset, IAuthorizeMyMovie authmymovie)
         {
-            _context = context;
             _repoMyMovie = repoMyMovie;
-            _currentuserid = currentuserid;
             _httpContextAccessor = httpContextAccessor;
-            _userManager = userManager;
             _movieset = movieset;
             _authmovieset = authmovieset;
             _authmymovie = authmymovie;
@@ -50,7 +40,7 @@ namespace Application.Controllers
         // GET: MyMovies/Create
         public IActionResult Create(int id)
         {
-            if (!_authmovieset.CheckUserId(id, _currentuserid, _httpContextAccessor, _userManager, _movieset))
+            if (!_authmovieset.CheckUserId(id, _httpContextAccessor))
             {
                 return Unauthorized();
             }
@@ -68,7 +58,7 @@ namespace Application.Controllers
         {
             if (ModelState.IsValid)
             {
-                if (!_authmovieset.CheckUserId(myMovie.MovieSetID, _currentuserid, _httpContextAccessor, _userManager, _movieset))
+                if (!_authmovieset.CheckUserId(myMovie.MovieSetID, _httpContextAccessor))
                 {
                     return Unauthorized();
                 }
@@ -80,8 +70,9 @@ namespace Application.Controllers
                 _repoMyMovie.Insert(myMovie);
                 return RedirectToAction("Details", "MovieSets", new { id = myMovie.MovieSetID });
             }
-            ViewData["MovieID"] = new SelectList(_context.Movies, "MovieID", "MovieName", myMovie.MovieID);
-            ViewData["MovieSetID"] = new SelectList(_context.MovieSets, "MovieSetID", "MovieSetID", myMovie.MovieSetID);
+            //TODO: daca nu merge lista de my moveis -> HERE
+            //ViewData["MovieID"] = new SelectList(_context.Movies, "MovieID", "MovieName", myMovie.MovieID);
+            //ViewData["MovieSetID"] = new SelectList(_context.MovieSets, "MovieSetID", "MovieSetID", myMovie.MovieSetID);
             return View(myMovie);
         }
 
@@ -94,7 +85,7 @@ namespace Application.Controllers
             }
 
             var myMovie = _repoMyMovie.Get(id);
-            if (!_authmovieset.CheckUserId(myMovie.MovieSetID, _currentuserid, _httpContextAccessor, _userManager, _movieset))
+            if (!_authmovieset.CheckUserId(myMovie.MovieSetID, _httpContextAccessor))
             {
                 return Unauthorized();
             }
@@ -118,7 +109,7 @@ namespace Application.Controllers
 
             if (ModelState.IsValid)
             {
-                if (!_authmovieset.CheckUserId(myMovie.MovieSetID, _currentuserid, _httpContextAccessor, _userManager, _movieset))
+                if (!_authmovieset.CheckUserId(myMovie.MovieSetID, _httpContextAccessor))
                 {
                     return Unauthorized();
                 }
@@ -153,7 +144,7 @@ namespace Application.Controllers
             }
 
             var myMovie = _repoMyMovie.Get(id);
-            if (!_authmovieset.CheckUserId(myMovie.MovieSetID, _currentuserid, _httpContextAccessor, _userManager, _movieset))
+            if (!_authmovieset.CheckUserId(myMovie.MovieSetID, _httpContextAccessor))
             {
                 return Unauthorized();
             }
@@ -171,7 +162,7 @@ namespace Application.Controllers
         public IActionResult DeleteConfirmed(int id)
         {
             var myMovie = _repoMyMovie.Get(id);
-            if (!_authmovieset.CheckUserId(myMovie.MovieSetID, _currentuserid, _httpContextAccessor, _userManager, _movieset))
+            if (!_authmovieset.CheckUserId(myMovie.MovieSetID, _httpContextAccessor))
             {
                 return Unauthorized();
             }

@@ -9,21 +9,10 @@ using System.Threading.Tasks;
 
 namespace Application_BusinessRules
 {
-    public interface ICurrentUserId
+    public interface ICurrentUserService
     {
-        string GetCurrentUserId(IHttpContextAccessor httpContextAccessor, UserManager<ApplicationUser> userManager);
+        string GetCurrentUserId(IHttpContextAccessor httpContextAccessor);
     }
-
-    public class CurrentUserId : ICurrentUserId
-    {
-        public string GetCurrentUserId(IHttpContextAccessor _httpContextAccessor, UserManager<ApplicationUser> _userManager)
-        {
-            var userId = _userManager.GetUserId(_httpContextAccessor.HttpContext.User);
-
-            return userId;
-        }
-    }
-
 
 }
 

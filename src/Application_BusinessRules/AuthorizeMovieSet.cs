@@ -10,28 +10,36 @@ namespace Application_BusinessRules
 {
     public interface IAuthorizeMovieSet
     {
-        bool CheckUserId(int ?id, ICurrentUserId currentUserId, IHttpContextAccessor httpContextAccessor, UserManager<ApplicationUser> userManager, RepositoryMovieSet repoMovieSet);
+        bool CheckUserId(int ?id, IHttpContextAccessor httpContextAccessor);
 
-        bool MovieSetExists(int id, RepositoryMovieSet repoMovieSet);
+        bool MovieSetExists(int id);
     }
     public class AuthorizeMovieSet: IAuthorizeMovieSet
     {
+        private RepositoryMovieSet repoMovieSet;
+        private ICurrentUserService currentUserService;
 
-        public bool CheckUserId(int? id, ICurrentUserId currentUserId, IHttpContextAccessor httpContextAccessor, UserManager<ApplicationUser> userManager, RepositoryMovieSet repoMovieSet)
+        public AuthorizeMovieSet(ICurrentUserService currentUserService, RepositoryMovieSet repoMovieSet)
+        {
+            this.currentUserService = currentUserService;
+            this.repoMovieSet = repoMovieSet;
+        }
+
+        public bool CheckUserId(int? id, IHttpContextAccessor httpContextAccessor)
         {
             if(id == null)
             {
                 throw new ArgumentNullException("Null");
             }
 
-            var userid = currentUserId.GetCurrentUserId(httpContextAccessor, userManager);
+            var userid = currentUserService.GetCurrentUserId(httpContextAccessor);
 
             MovieSet movieSet = repoMovieSet.GetSingle(id);
 
             return userid.Equals(movieSet.UserID);
         }
 
-        public bool MovieSetExists(int id, RepositoryMovieSet repoMovieSet)
+        public bool MovieSetExists(int id)
         {
             return repoMovieSet.GetAll().Any(e => e.MovieSetID == id);
         }

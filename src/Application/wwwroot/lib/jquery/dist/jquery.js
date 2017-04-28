@@ -314,7 +314,7 @@ jQuery.extend( {
 			typeof obj;
 	},
 
-	// Evaluates a script in a global context
+	// Evaluates a script in a global applicationContext
 	globalEval: function( code ) {
 		var script,
 			indirect = eval;
@@ -469,7 +469,7 @@ jQuery.extend( {
 	// A global GUID counter for objects
 	guid: 1,
 
-	// Bind a function to a context, optionally partially applying any
+	// Bind a function to a applicationContext, optionally partially applying any
 	// arguments.
 	proxy: function( fn, context ) {
 		var tmp, args, proxy;
@@ -734,12 +734,12 @@ function Sizzle( selector, context, results, seed ) {
 	var m, i, elem, nid, nidselect, match, groups, newSelector,
 		newContext = context && context.ownerDocument,
 
-		// nodeType defaults to 9, since context defaults to document
+		// nodeType defaults to 9, since applicationContext defaults to document
 		nodeType = context ? context.nodeType : 9;
 
 	results = results || [];
 
-	// Return early from calls with invalid selector or context
+	// Return early from calls with invalid selector or applicationContext
 	if ( typeof selector !== "string" || !selector ||
 		nodeType !== 1 && nodeType !== 9 && nodeType !== 11 ) {
 
@@ -757,13 +757,13 @@ function Sizzle( selector, context, results, seed ) {
 		if ( documentIsHTML ) {
 
 			// If the selector is sufficiently simple, try using a "get*By*" DOM method
-			// (excepting DocumentFragment context, where the methods don't exist)
+			// (excepting DocumentFragment applicationContext, where the methods don't exist)
 			if ( nodeType !== 11 && (match = rquickExpr.exec( selector )) ) {
 
 				// ID selector
 				if ( (m = match[1]) ) {
 
-					// Document context
+					// Document applicationContext
 					if ( nodeType === 9 ) {
 						if ( (elem = context.getElementById( m )) ) {
 
@@ -778,7 +778,7 @@ function Sizzle( selector, context, results, seed ) {
 							return results;
 						}
 
-					// Element context
+					// Element applicationContext
 					} else {
 
 						// Support: IE, Opera, Webkit
@@ -816,13 +816,13 @@ function Sizzle( selector, context, results, seed ) {
 					newContext = context;
 					newSelector = selector;
 
-				// qSA looks outside Element context, which is not what we want
+				// qSA looks outside Element applicationContext, which is not what we want
 				// Thanks to Andrew Dupont for this workaround technique
 				// Support: IE <=8
 				// Exclude object elements
 				} else if ( context.nodeName.toLowerCase() !== "object" ) {
 
-					// Capture the context ID, setting it first if necessary
+					// Capture the applicationContext ID, setting it first if necessary
 					if ( (nid = context.getAttribute( "id" )) ) {
 						nid = nid.replace( rescape, "\\$&" );
 					} else {
@@ -838,7 +838,7 @@ function Sizzle( selector, context, results, seed ) {
 					}
 					newSelector = groups.join( "," );
 
-					// Expand context for sibling selectors
+					// Expand applicationContext for sibling selectors
 					newContext = rsibling.test( selector ) && testContext( context.parentNode ) ||
 						context;
 				}
@@ -1002,8 +1002,8 @@ function createPositionalPseudo( fn ) {
 }
 
 /**
- * Checks a node for validity as a Sizzle context
- * @param {Element|Object=} context
+ * Checks a node for validity as a Sizzle applicationContext
+ * @param {Element|Object=} applicationContext
  * @returns {Element|Object|Boolean} The input node if acceptable, otherwise a falsy value
  */
 function testContext( context ) {
@@ -2247,7 +2247,7 @@ function setMatcher( preFilter, selector, matcher, postFilter, postFinder, postS
 			postMap = [],
 			preexisting = results.length,
 
-			// Get initial elements from seed or context
+			// Get initial elements from seed or applicationContext
 			elems = seed || multipleContexts( selector || "*", context.nodeType ? [ context ] : context, [] ),
 
 			// Prefilter to get matcher input, preserving a map for seed-results synchronization
@@ -2334,7 +2334,7 @@ function matcherFromTokens( tokens ) {
 		implicitRelative = leadingRelative || Expr.relative[" "],
 		i = leadingRelative ? 1 : 0,
 
-		// The foundational matcher ensures that elements are reachable from top-level context(s)
+		// The foundational matcher ensures that elements are reachable from top-level applicationContext(s)
 		matchContext = addCombinator( function( elem ) {
 			return elem === checkContext;
 		}, implicitRelative, true ),
@@ -2395,7 +2395,7 @@ function matcherFromGroupMatchers( elementMatchers, setMatchers ) {
 				unmatched = seed && [],
 				setMatched = [],
 				contextBackup = outermostContext,
-				// We must always have either seed elements or outermost context
+				// We must always have either seed elements or outermost applicationContext
 				elems = seed || byElement && Expr.find["TAG"]( "*", outermost ),
 				// Use integer dirruns iff this is the outermost matcher
 				dirrunsUnique = (dirruns += contextBackup == null ? 1 : Math.random() || 0.1),
@@ -2531,7 +2531,7 @@ compile = Sizzle.compile = function( selector, match /* Internal Use Only */ ) {
  *  selector functions
  * @param {String|Function} selector A selector or a pre-compiled
  *  selector function built with Sizzle.compile
- * @param {Element} context
+ * @param {Element} applicationContext
  * @param {Array} [results]
  * @param {Array} [seed] A set of elements to match against
  */
@@ -2543,10 +2543,10 @@ select = Sizzle.select = function( selector, context, results, seed ) {
 	results = results || [];
 
 	// Try to minimize operations if there is only one selector in the list and no seed
-	// (the latter of which guarantees us context)
+	// (the latter of which guarantees us applicationContext)
 	if ( match.length === 1 ) {
 
-		// Reduce context if the leading compound selector is an ID
+		// Reduce applicationContext if the leading compound selector is an ID
 		tokens = match[0] = match[0].slice( 0 );
 		if ( tokens.length > 2 && (token = tokens[0]).type === "ID" &&
 				support.getById && context.nodeType === 9 && documentIsHTML &&
@@ -2574,7 +2574,7 @@ select = Sizzle.select = function( selector, context, results, seed ) {
 				break;
 			}
 			if ( (find = Expr.find[ type ]) ) {
-				// Search, expanding context for leading sibling combinators
+				// Search, expanding applicationContext for leading sibling combinators
 				if ( (seed = find(
 					token.matches[0].replace( runescape, funescape ),
 					rsibling.test( tokens[0].type ) && testContext( context.parentNode ) || context
@@ -2787,7 +2787,7 @@ jQuery.fn.extend( {
 			jQuery.find( selector, self[ i ], ret );
 		}
 
-		// Needed because $( selector, context ) becomes $( context ).find( selector )
+		// Needed because $( selector, applicationContext ) becomes $( applicationContext ).find( selector )
 		ret = this.pushStack( len > 1 ? jQuery.unique( ret ) : ret );
 		ret.selector = this.selector ? this.selector + " " + selector : selector;
 		return ret;
@@ -2849,7 +2849,7 @@ var rootjQuery,
 				match = rquickExpr.exec( selector );
 			}
 
-			// Match html or make sure no context is specified for #id
+			// Match html or make sure no applicationContext is specified for #id
 			if ( match && ( match[ 1 ] || !context ) ) {
 
 				// HANDLE: $(html) -> $(array)
@@ -2868,7 +2868,7 @@ var rootjQuery,
 					if ( rsingleTag.test( match[ 1 ] ) && jQuery.isPlainObject( context ) ) {
 						for ( match in context ) {
 
-							// Properties of context are called as methods if possible
+							// Properties of applicationContext are called as methods if possible
 							if ( jQuery.isFunction( this[ match ] ) ) {
 								this[ match ]( context[ match ] );
 
@@ -2903,8 +2903,8 @@ var rootjQuery,
 			} else if ( !context || context.jquery ) {
 				return ( context || root ).find( selector );
 
-			// HANDLE: $(expr, context)
-			// (which is just equivalent to: $(context).find(expr)
+			// HANDLE: $(expr, applicationContext)
+			// (which is just equivalent to: $(applicationContext).find(expr)
 			} else {
 				return this.constructor( context ).find( selector );
 			}
@@ -3302,7 +3302,7 @@ jQuery.Callbacks = function( options ) {
 				return !!locked;
 			},
 
-			// Call all callbacks with the given context and arguments
+			// Call all callbacks with the given applicationContext and arguments
 			fireWith: function( context, args ) {
 				if ( !locked ) {
 					args = args || [];
@@ -4358,7 +4358,7 @@ function buildFragment( elems, context, scripts, selection, ignored ) {
 	i = 0;
 	while ( ( elem = nodes[ i++ ] ) ) {
 
-		// Skip elements already in the context collection (trac-4087)
+		// Skip elements already in the applicationContext collection (trac-4087)
 		if ( selection && jQuery.inArray( elem, selection ) > -1 ) {
 			if ( ignored ) {
 				ignored.push( elem );
@@ -5524,7 +5524,7 @@ jQuery.fn.extend( {
 	replaceWith: function() {
 		var ignored = [];
 
-		// Make the changes, replacing each non-ignored context element with the new content
+		// Make the changes, replacing each non-ignored applicationContext element with the new content
 		return domManip( this, arguments, function( elem ) {
 			var parent = this.parentNode;
 
@@ -8384,7 +8384,7 @@ jQuery.extend( {
 			// Create the final options object
 			s = jQuery.ajaxSetup( {}, options ),
 
-			// Callbacks context
+			// Callbacks applicationContext
 			callbackContext = s.context || s,
 
 			// Context for global events is callbackContext if it is a DOM node or jQuery collection
@@ -9363,7 +9363,7 @@ support.createHTMLDocument = ( function() {
 
 
 // Argument "data" should be string of html
-// context (optional): If specified, the fragment will be created in this context,
+// applicationContext (optional): If specified, the fragment will be created in this applicationContext,
 // defaults to document
 // keepScripts (optional): If true, will include scripts passed in the html string
 jQuery.parseHTML = function( data, context, keepScripts ) {
