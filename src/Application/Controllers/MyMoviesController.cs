@@ -62,7 +62,7 @@ namespace Application.Controllers
                 {
                     return Unauthorized();
                 }
-                if (await _authmymovie.CheckMovie(_movieset, myMovie))
+                if (_authmymovie.CheckMovie(_movieset, myMovie))
                 {
                     return NoContent();
                 }

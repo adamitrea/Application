@@ -29,24 +29,24 @@ namespace Application_DbAccess
             }
             return moviesets.SingleOrDefault(s => s.MovieSetID == id);
         }
-        public async Task<MovieSet> Get(int ?id)
+        public MovieSet Get(int ?id)
         {
             if (id == null)
             {
                 throw new ArgumentNullException("MovieSet");
             }
-            return await moviesets.Include(x => x.MyMovies)
+            return moviesets.Include(x => x.MyMovies)
                                 .ThenInclude(x => x.Movie)
-                                    .SingleOrDefaultAsync(s => s.MovieSetID == id);
+                                    .SingleOrDefault(s => s.MovieSetID == id);
         }
-        public async void Insert(MovieSet movieset)
+        public void Insert(MovieSet movieset)
         {
             if (movieset == null)
             {
                 throw new ArgumentNullException("MovieSet");
             }
             moviesets.Add(movieset);
-            await _context.SaveChangesAsync();
+            _context.SaveChanges();
         }
 
         public void Update(MovieSet movieset)
