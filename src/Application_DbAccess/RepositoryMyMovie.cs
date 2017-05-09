@@ -30,24 +30,28 @@ namespace Application_DbAccess
             }
             return mymovies.SingleOrDefault(s => s.MyMovieID == id);
         }
-        public async void Insert(MyMovie mymovie)
+        public void Insert(MyMovie mymovie)
         {
             if (mymovie == null)
             {
                 throw new ArgumentNullException("MyMovie");
             }
             mymovies.Add(mymovie);
-            await _context.SaveChangesAsync();
+            _context.SaveChanges();
         }
 
-        public async void Update(MyMovie mymovie)
+        public void Update(MyMovie mymovie)
         {
             if (mymovie == null)
             {
                 throw new ArgumentNullException("MyMovie");
             }
-            _context.Update(mymovie);
-            await _context.SaveChangesAsync();
+            MyMovie dbMyMovie = _context.Find<MyMovie>(mymovie.MyMovieID);
+            dbMyMovie.MovieID = mymovie.MovieID;
+            dbMyMovie.MyMovieComment = mymovie.MyMovieComment;
+            dbMyMovie.MyMovieRating = mymovie.MyMovieRating;
+            _context.Update(dbMyMovie);
+            _context.SaveChanges();
         }
 
         public void Delete(MyMovie mymovie)

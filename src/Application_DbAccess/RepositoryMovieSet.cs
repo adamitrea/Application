@@ -55,19 +55,21 @@ namespace Application_DbAccess
             {
                 throw new ArgumentNullException("MovieSet");
             }
-            _context.Update(movieset);
-                _context.SaveChanges();
+            var dbMovieSet = _context.Find<MovieSet>(movieset.MovieSetID);
+            dbMovieSet.SetName = movieset.SetName;
+            _context.Update(dbMovieSet);
+            _context.SaveChanges();
 
         }
 
-        public async void Delete(MovieSet movieset)
+        public void Delete(MovieSet movieset)
         {
             if (movieset == null)
             {
                 throw new ArgumentNullException("MovieSet");
             }
             moviesets.Remove(movieset);
-            await _context.SaveChangesAsync();
+            _context.SaveChanges();
         }
     }
 }

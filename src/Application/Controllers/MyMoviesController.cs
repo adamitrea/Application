@@ -54,7 +54,7 @@ namespace Application.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("MyMovieID,CreationDate,MovieID,MovieSetID,MyMovieComment,MyMovieRating")] MyMovie myMovie)
+        public IActionResult Create([Bind("MyMovieID,CreationDate,MovieID,MovieSetID,MyMovieComment,MyMovieRating")] MyMovie myMovie)
         {
             if (ModelState.IsValid)
             {

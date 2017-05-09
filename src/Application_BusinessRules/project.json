@@ -4,7 +4,7 @@
   "dependencies": {
     "Application_DbAccess": "1.0.0-*",
     "Microsoft.AspNetCore.Http.Abstractions": "1.1.1",
-    "Microsoft.AspNetCore.Identity": "1.0.0",
+    "Microsoft.AspNetCore.Identity": "1.1.1",
     "NETStandard.Library": "1.6.1"
   },
 

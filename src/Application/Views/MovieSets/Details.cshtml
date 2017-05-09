@@ -7,7 +7,7 @@
 
 <div class="container-fluid">
     <div class="col-md-2">
-        @await Component.InvokeAsync("MovieSets")
+        @await Component.InvokeAsync("MovieSets",Model.UserID)
     </div>
     <div class="col-md-10">
         <h2 id="title">@Model.SetName</h2>

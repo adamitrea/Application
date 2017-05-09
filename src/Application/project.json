@@ -50,7 +50,8 @@
     "Microsoft.AspNetCore.Authentication.Facebook": "1.1.1",
     "Microsoft.AspNetCore.Authentication.Google": "1.1.1",
     "Application_DbAccess": "1.0.0-*",
-    "Application_BusinessRules": "1.0.0-*"
+    "Application_BusinessRules": "1.0.0-*",
+    "Microsoft.EntityFrameworkCore": "1.1.1"
   },
 
   "tools": {

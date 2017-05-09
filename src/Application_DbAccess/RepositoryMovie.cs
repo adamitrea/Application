@@ -22,9 +22,9 @@ namespace Application_DbAccess
             return movies.AsEnumerable();
         }
 
-        public async Task<Movie> Get(long id)
+        public Movie Get(long id)
         {
-            return await movies.SingleOrDefaultAsync(s => s.MovieID == id);
+            return movies.SingleOrDefault(s => s.MovieID == id);
         }
         public void Insert(Movie movie)
         {
