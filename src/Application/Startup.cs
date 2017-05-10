@@ -48,7 +48,10 @@ namespace Application
             });
 
           
-            services.AddIdentity<ApplicationUser, IdentityRole>()
+            services.AddIdentity<ApplicationUser, IdentityRole>(cfg =>
+                {
+                    
+                })
                 .AddEntityFrameworkStores<ApplicationContext>()
                 .AddDefaultTokenProviders();
            
