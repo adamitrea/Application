@@ -1,10 +1,9 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using Application_DbAccess;
-using Microsoft.AspNetCore.Http;
-using Application.Services;
 
 namespace Application.ViewComponents
 {
@@ -27,21 +26,17 @@ namespace Application.ViewComponents
 
         public async Task<IViewComponentResult> InvokeAsync(string id)
         {
-            var items = await GetItemsAsync(id);
+            var items = GetItems(id);
             return View(items);
         }
 
-        private async Task<List<MovieSet>> GetItemsAsync(string id)
+        private List<MovieSet> GetItems(string id)
         {
-            var movieSets = new List<MovieSet>();
 
-            var sets = _repoMovieSet.GetAll();
+            var sets = _repoMovieSet.GetAll()
+                .Where(x => x.UserID == id);
 
-            foreach(MovieSet s in sets)
-            {
-                if (s.UserID == id) movieSets.Add(s);
-            }
-            return movieSets;
+            return sets.ToList();
         }
     }
 }
