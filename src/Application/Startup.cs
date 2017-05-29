@@ -31,6 +31,11 @@ namespace Application
                 
             }
 
+            if (env.EnvironmentName == "Publish")
+            {
+                builder.AddUserSecrets();
+            }
+
             builder.AddEnvironmentVariables();
             Configuration = builder.Build();
         }

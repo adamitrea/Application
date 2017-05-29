@@ -13,6 +13,7 @@ namespace Application
         {
             var host = new WebHostBuilder()
                 .UseKestrel()
+                .UseEnvironment("Publish")
                 .UseContentRoot(Directory.GetCurrentDirectory())
                 .UseIISIntegration()
                 .UseStartup<Startup>()
