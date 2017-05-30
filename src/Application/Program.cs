@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.IO;
 using Microsoft.AspNetCore.Hosting;
 
 namespace Application
@@ -13,7 +9,9 @@ namespace Application
         {
             var host = new WebHostBuilder()
                 .UseKestrel()
-                .UseEnvironment("Publish")
+//#if !DEBUG
+//                .UseEnvironment("Publish")
+//#endif
                 .UseContentRoot(Directory.GetCurrentDirectory())
                 .UseIISIntegration()
                 .UseStartup<Startup>()

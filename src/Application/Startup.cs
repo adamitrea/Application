@@ -11,30 +11,39 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Http;
 using Application_DbAccess;
 using Application_BusinessRules;
+using Microsoft.ApplicationInsights;
+using Microsoft.ApplicationInsights.DataContracts;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Rewrite;
 
 namespace Application
 {
     public class Startup
     {
+        private TelemetryClient telemetryClient = new TelemetryClient();
+
         public Startup(IHostingEnvironment env)
         {
+            telemetryClient.InstrumentationKey = "10f4489b-25f0-4a02-aa9d-1879f936d81f";
+            telemetryClient.TrackTrace($"Startup: {env.EnvironmentName}", SeverityLevel.Information);
+
             var builder = new ConfigurationBuilder()
                 .SetBasePath(env.ContentRootPath)
                 .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
                 .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true);
 
-            if (env.IsDevelopment())
-            {
-                // For more details on using the user secret store see http://go.microsoft.com/fwlink/?LinkID=532709
-                //builder.AddUserSecrets<Startup>();
-                builder.AddUserSecrets();
+            //if (env.IsDevelopment())
+            //{
+            //    // For more details on using the user secret store see http://go.microsoft.com/fwlink/?LinkID=532709
+            //    //builder.AddUserSecrets<Startup>();
+            //    builder.AddUserSecrets();
                 
-            }
+            //}
 
-            if (env.EnvironmentName == "Publish")
-            {
-                builder.AddUserSecrets();
-            }
+            //if (env.EnvironmentName == "Publish")
+            //{
+            //    builder.AddUserSecrets();
+            //}
 
             builder.AddEnvironmentVariables();
             Configuration = builder.Build();
@@ -63,6 +72,12 @@ namespace Application
            // services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 
             services.AddMvc();
+
+            services.Configure<MvcOptions>(options =>
+            {
+                options.Filters.Add(new RequireHttpsAttribute());
+
+            });
 
             // Add application services.
             services.AddTransient<IEmailSender, AuthMessageSender>();
@@ -103,6 +118,11 @@ namespace Application
 
             app.UseIdentity();
 
+            var options = new RewriteOptions()
+                    .AddRedirectToHttps();
+
+            app.UseRewriter(options);
+
             // Add external authentication middleware below. To configure them please see http://go.microsoft.com/fwlink/?LinkID=532715
             app.UseFacebookAuthentication(new FacebookOptions()
             {
@@ -125,5 +145,6 @@ namespace Application
             var userManager = app.ApplicationServices.GetService<UserManager<ApplicationUser>>();
             DbInitializer.Initialize(_context,userManager);
         }
+
     }
 }

@@ -1,7 +1,7 @@
 {
   "runtimeTarget": {
     "name": ".NETCoreApp,Version=v1.0/",
-    "signature": "5a273995926460fecfda1f1c5f4a6f6336809447"
+    "signature": "024e1308171ea5c83f3a615f6d6f4456ec2866f8"
   },
   "compilationOptions": {
     "defines": [
@@ -44,7 +44,8 @@
           "Microsoft.Extensions.Configuration.Json": "1.1.2",
           "Microsoft.Extensions.Configuration.UserSecrets": "1.1.2",
           "Microsoft.Extensions.Logging": "1.1.2",
-          "Microsoft.Extensions.Options.ConfigurationExtensions": "1.1.2"
+          "Microsoft.Extensions.Options.ConfigurationExtensions": "1.1.2",
+          "Microsoft.AspNetCore.Rewrite": "1.0.2"
         },
         "compile": {
           "Application.dll": {}
@@ -621,6 +622,20 @@
         },
         "compile": {
           "lib/netstandard1.5/Microsoft.AspNetCore.Razor.Runtime.dll": {}
+        }
+      },
+      "Microsoft.AspNetCore.Rewrite/1.0.2": {
+        "dependencies": {
+          "Microsoft.AspNetCore.Hosting.Abstractions": "1.1.2",
+          "Microsoft.AspNetCore.Http.Extensions": "1.1.2",
+          "Microsoft.Extensions.Configuration.Abstractions": "1.1.2",
+          "Microsoft.Extensions.FileProviders.Abstractions": "1.1.1",
+          "Microsoft.Extensions.Logging.Abstractions": "1.1.2",
+          "Microsoft.Extensions.Options": "1.1.2",
+          "NETStandard.Library": "1.6.1"
+        },
+        "compile": {
+          "lib/netstandard1.3/Microsoft.AspNetCore.Rewrite.dll": {}
         }
       },
       "Microsoft.AspNetCore.Routing/1.0.1": {
@@ -2989,7 +3004,8 @@
           "Microsoft.Extensions.Configuration.Json": "1.1.2",
           "Microsoft.Extensions.Configuration.UserSecrets": "1.1.2",
           "Microsoft.Extensions.Logging": "1.1.2",
-          "Microsoft.Extensions.Options.ConfigurationExtensions": "1.1.2"
+          "Microsoft.Extensions.Options.ConfigurationExtensions": "1.1.2",
+          "Microsoft.AspNetCore.Rewrite": "1.0.2"
         },
         "runtime": {
           "Application.dll": {}
@@ -3566,6 +3582,20 @@
         },
         "runtime": {
           "lib/netstandard1.5/Microsoft.AspNetCore.Razor.Runtime.dll": {}
+        }
+      },
+      "Microsoft.AspNetCore.Rewrite/1.0.2": {
+        "dependencies": {
+          "Microsoft.AspNetCore.Hosting.Abstractions": "1.1.2",
+          "Microsoft.AspNetCore.Http.Extensions": "1.1.2",
+          "Microsoft.Extensions.Configuration.Abstractions": "1.1.2",
+          "Microsoft.Extensions.FileProviders.Abstractions": "1.1.1",
+          "Microsoft.Extensions.Logging.Abstractions": "1.1.2",
+          "Microsoft.Extensions.Options": "1.1.2",
+          "NETStandard.Library": "1.6.1"
+        },
+        "runtime": {
+          "lib/netstandard1.3/Microsoft.AspNetCore.Rewrite.dll": {}
         }
       },
       "Microsoft.AspNetCore.Routing/1.0.1": {
@@ -6037,6 +6067,11 @@
       "type": "package",
       "serviceable": true,
       "sha512": "sha512-hsq6xJeqDDb78akZuy79QE3kaCxcigD3vccbIaNrrz7JSXOzayfteF06ToK+J1SXSDRtrBj3XZZfrjiqIY/vCw=="
+    },
+    "Microsoft.AspNetCore.Rewrite/1.0.2": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-kUv86y0gj4Ki5ro/etU/rM30mSUXGK+k8SPfXm+PZ8YYRhUjLC6cwm2da/PhDKIcxmrtvC1Ua5GwjDs18HVfSA=="
     },
     "Microsoft.AspNetCore.Routing/1.0.1": {
       "type": "package",
