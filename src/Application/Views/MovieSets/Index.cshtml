@@ -4,47 +4,50 @@
     ViewData["Title"] = "Index";
 }
 
-<h2>Index</h2>
+<h2 id="title">Home</h2>
 
 <p>
     <a asp-action="Create">
         <img src="~/images/glyphicons-433-plus.jpg" width="20" class="img-responsive" />
     </a>
 </p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                <h5><b>Name</b></h5>
-            </th>
-            <th>
-                <h5><b>Date Added</b></h5>
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                <a asp-action="Details" asp-route-id="@item.MovieSetID">@Html.DisplayFor(modelItem => item.SetName)</a>
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.CreationDate)
-            </td>
-            <td>
-                <span>
-                    <a asp-action="Edit" asp-route-id="@item.MovieSetID">
-                        <img src="~/images/glyphicons-151-edit.jpg" width="20" class="img-responsive" />
-                    </a>
-                </span> 
-                <div>
-                    <a asp-action="Delete" asp-route-id="@item.MovieSetID">
-                        <img src="~/images/glyphicons-208-remove.jpg" width="20" class="img-responsive" />
-                    </a>
-                </div>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+<div class="container-fluid">
+    <table class="table">
+        <thead>
+            <tr>
+                <th class="col-md-6">
+                    <h5 id="title"><b>Name</b></h5>
+                </th>
+                <th class="col-md-5">
+                    <h5 id="title"><b>Date Added</b></h5>
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td class="col-md-6">
+                        <a asp-action="Details" asp-route-id="@item.MovieSetID">@Html.DisplayFor(modelItem => item.SetName)</a>
+                    </td>
+                    <td class="col-md-5">
+                        @Html.DisplayFor(modelItem => item.CreationDate)
+                    </td>
+                    <td class="col-md-1">
+                        <span>
+                            <a asp-action="Edit" asp-route-id="@item.MovieSetID">
+                                <img src="~/images/glyphicons-151-edit.jpg" width="20" class="img-responsive" />
+                            </a>
+                        </span>
+                        <div>
+                            <a asp-action="Delete" asp-route-id="@item.MovieSetID">
+                                <img src="~/images/glyphicons-208-remove.jpg" width="20" class="img-responsive" />
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

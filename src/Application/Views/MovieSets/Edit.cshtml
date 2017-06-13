@@ -4,17 +4,17 @@
     ViewData["Title"] = "Edit";
 }
 
-<h2>Edit</h2>
+<h2 id="title">Edit</h2>
 
 <form asp-action="Edit">
     <div class="form-horizontal">
-        <h4>MovieSet</h4>
+        <h4></h4>
         <hr />
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
         <input type="hidden" asp-for="MovieSetID"/>
         <input type="hidden" asp-for="UserID" />
         <div class="form-group">
-            <label asp-for="SetName" class="col-md-2 control-label">Name</label>
+            <label asp-for="SetName" class="col-md-2 control-label" id="title">Name</label>
             <div class="col-md-10">
                 <input asp-for="SetName" class="form-control" />
                 <span asp-validation-for="SetName" class="text-danger" />

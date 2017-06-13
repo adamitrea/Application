@@ -4,15 +4,15 @@
     ViewData["Title"] = "Create";
 }
 
-<h2>Create</h2>
+<h2 id="title">Create</h2>
 
 <form asp-action="Create">
     <div class="form-horizontal">
-        <h4>MovieList</h4>
+        <h4 id="title">List</h4>
         <hr />
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
         <div class="form-group">
-            <label asp-for="SetName" class="col-md-2 control-label">Name</label>
+            <label asp-for="SetName" class="col-md-2 control-label" id="title">Name</label>
             <div class="col-md-10">
                 <input asp-for="SetName" class="form-control" />
                 <span asp-validation-for="SetName" class="text-danger" />

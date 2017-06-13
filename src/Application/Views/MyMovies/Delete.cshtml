@@ -4,30 +4,30 @@
     ViewData["Title"] = "Delete";
 }
 
-<h2>Delete</h2>
+<h2 id="title">Delete</h2>
 
 <h3>Are you sure you want to delete this?</h3>
 <div>
-    <h4>MyMovie</h4>
+    <h4 id="title">Movie</h4>
     <hr />
     <dl class="dl-horizontal">
         <dt>
-            @Html.DisplayNameFor(model => model.CreationDate)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.CreationDate)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.MyMovieComment)
+            Comment
         </dt>
         <dd>
             @Html.DisplayFor(model => model.MyMovieComment)
         </dd>
         <dt>
-            @Html.DisplayNameFor(model => model.MyMovieRating)
+            Rating
         </dt>
         <dd>
             @Html.DisplayFor(model => model.MyMovieRating)
+        </dd>
+        <dt>
+            Date Added
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.CreationDate)
         </dd>
     </dl>
     

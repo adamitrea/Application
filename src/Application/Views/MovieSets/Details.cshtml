@@ -10,7 +10,7 @@
         @await Component.InvokeAsync("MovieSets",new { id = Model.UserID})
     </div>
     <div class="col-md-10">
-        <h2 id="title">@Model.SetName</h2>
+        <h2 id="listtitle">@Model.SetName</h2>
 
         <p class="col-xs-1">
             <a asp-action="Create" asp-route-id="@Model.MovieSetID" asp-controller="MyMovies">

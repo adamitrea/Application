@@ -8,18 +8,18 @@
     <link rel="stylesheet" type="text/css" href="~/css/auto-complete.css">
 </head>
 
-<h2>Create</h2>
+<h2 id="title">Create</h2>
 
 <form asp-action="Create">
     <div class="form-horizontal">
-        <h4>MyMovie</h4>
+        <h4 id="title">Movie</h4>
         <hr />
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
         <input type="hidden" asp-for="MovieSetID" />
         <input type="hidden" asp-for="MovieID" id="hiddenMvId" />
         <input type="hidden" asp-for="CreationDate" />
         <div class="form-group">
-            <label asp-for="MovieID" class="col-md-2 control-label">Movie</label>
+            <label asp-for="MovieID" class="col-md-2 control-label" id="title">Movie</label>
             <div class="col-md-10">
                 <input id="inputMovieSelector" class="form-control" />
             </div>
@@ -27,14 +27,14 @@
         </div>
 
         <div class="form-group">
-            <label asp-for="MyMovieComment" class="col-md-2 control-label">Comment</label>
+            <label asp-for="MyMovieComment" class="col-md-2 control-label" id="title">Comment</label>
             <div class="col-md-10">
                 <input asp-for="MyMovieComment" class="form-control" />
                 <span asp-validation-for="MyMovieComment" class="text-danger" />
             </div>
         </div>
         <div class="form-group">
-            <label asp-for="MyMovieRating" class="col-md-2 control-label">Rating</label>
+            <label asp-for="MyMovieRating" class="col-md-2 control-label" id="title">Rating</label>
             <div class="col-md-10">
                 <input asp-for="MyMovieRating" class="form-control" />
                 <span asp-validation-for="MyMovieRating" class="text-danger" />

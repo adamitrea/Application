@@ -1,8 +1,10 @@
 ﻿@model IEnumerable<Application_DbAccess.MovieSet>
-<h3  id="title">Movie Lists</h3>
+<h2  id="title">Movie Lists</h2>
 <div>
+    <ul>
     @foreach(var item in Model)
     {
-        <h5><a asp-area="" asp-controller="MovieSets" asp-action="Details" asp-route-id="@item.MovieSetID">@item.SetName</a></h5>
+        <li><h5><b><a asp-area="" asp-controller="MovieSets" asp-action="Details" asp-route-id="@item.MovieSetID">@item.SetName</a></b></h5></li>
     }
+    </ul>
 </div>
